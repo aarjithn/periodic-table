@@ -67,8 +67,6 @@ jQuery.fn.center = function () {
     velocity({ width: 640, height: 480, translateX: transX, translateY: transY }, 
     { easing: [ 1.000, -0.025, 0.525, 0.905 ], duration: 100, queue: false,});
 
-  // var translate = "translate(" + transX + "px," + transY + "px)";
-
   // console.log("top", transX);
   // console.log("left", transY);
 
