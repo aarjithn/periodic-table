@@ -14,30 +14,51 @@ $(document).on("click", ".element:not(.expanded)", function() {
 
   var $self = $(this);
 
-  $self.addClass("expanded"); //.delay(600).addClass("detailed");
-
-  setTimeout(function() {
-    $self.addClass("detailed");
-  }, 600);
-
-  // $('#table').addClass("blurred");  
+  $self.addClass("expanded selected");
   $(".backdrop").show();
+
+  $(".backdrop").velocity({
+    opacity: 1
+  }, {
+    duration: 700
+  });
+
   $self.center();
 });
 
-$(document).on("click", ".element.detailed", function() {
-  $(this).removeClass("detailed");
-  // $('#table').removeClass("blurred");
-  $(this).
-    velocity({ width: 70, height: 70, translateX: 0, translateY: 0 }, 
-    { easing: [ 1.000, -0.025, 0.525, 0.905 ], 
-      duration: 100, 
+$(document).on("click", ".details-close", function() {
+
+  var $el = $(this).closest(".element");
+
+  $el.removeClass("detailed selected");
+  
+  $el.
+    velocity({ 
+      width: 60,
+      height: 60,
+      translateX: 0, 
+      translateY: 0,
+      translateZ: 0
+    }, 
+    { 
+      easing: [ 1.000, -0.025, 0.525, 0.905 ], 
+      duration: 800, 
       queue: false,
       complete: function() {
-        $(this).removeClass('expanded')
+        $el.removeClass('expanded');
+        $el.find('.details').hide();
       }
     });
-  $(".backdrop").hide();
+
+  $(".backdrop").velocity({
+    opacity: 0
+  }, {
+    duration: 700,
+    complete: function() {
+      $(".backdrop").hide();
+    }
+  });
+
 });
 
 $(window).bind('resize', function() {
@@ -45,12 +66,17 @@ $(window).bind('resize', function() {
 });
 
 Handlebars.registerHelper("coordinatePos", function(pos) {
-  var coordinatePos = (pos) * 70;
+  var coordinatePos = (pos) * 60;
   return coordinatePos;
 });
 
 Handlebars.registerHelper("classify", function(str) {
   return str.replace(/\s+/g, '-').toLowerCase();
+});
+
+Handlebars.registerHelper("checkEmpty", function(val) {
+    if(val === null) return "Unknown";
+    return val;
 });
 
 jQuery.fn.center = function () {
@@ -59,18 +85,41 @@ jQuery.fn.center = function () {
 
   var origTop = this.css("top").split("px")[0];
   var origLeft = this.css("left").split("px")[0];
-
-  var transX = left - +origLeft;
-  var transY = top - +origTop;
-
+  
+  $(this).find('.details').show();
+  
   $(this).
-    velocity({ width: 640, height: 480, translateX: transX, translateY: transY }, 
-    { easing: [ 1.000, -0.025, 0.525, 0.905 ], duration: 100, queue: false,});
-
-  // console.log("top", transX);
-  // console.log("left", transY);
-
-  // this.css({"transform": translate});
+    velocity({
+      width: 640,
+      height: 480,
+      translateX: left - +origLeft,
+      translateY: top - +origTop,
+      translateZ: 0      
+    }, 
+    { 
+      easing: [ 1.000, -0.025, 0.525, 0.905 ], 
+      duration: 800, 
+      queue: false,
+      complete: function() {
+        $(this).addClass('detailed');
+        countTo($(this));
+      }
+    });
 
   return this;
+}
+
+function countTo ($el) {
+  $el.find('.count').each(function () {
+      if($(this).text() === 'Unknown') return;
+      $(this).prop('Counter', 0).animate({
+          Counter: $(this).text()
+      }, {
+          duration: 1000,
+          easing: 'swing',
+          step: function (now) {
+              $(this).text(now.toFixed(4));
+          }
+      });
+  });
 }

@@ -1,23 +1,33 @@
 <!doctype html>
-<html class="" lang="en">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Isotope</title>
-        <meta name="description" content="">
+        <title>Periodic Table</title>
+        <meta name="description" content="Periodic Table for web - Inspired by the Isotope app for android.">
+        <meta name="keywords" content="Periodic Table, Isotope">
+        <meta name="author" content="Aarjith Nandakumar">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.min.css">
         <link rel="stylesheet" href="css/main.css">
 
+        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
     </head>
+
     <body>
-        <header class="pane-header">Isotope</header>
+        <header class="pane-header">Periodic Table</header>
 
         <section class="backdrop"></section>
 
         <section id="table"></section>
+
+        <footer>
+            Credits to <a arget="_blank" href="https://play.google.com/store/apps/details?id=com.underwood.periodic_table">Isotope app</a> for the brilliant design and <a arget="_blank" href="https://github.com/Bowserinator/Periodic-Table-JSON">Bowserinator</a> for data. 
+            Made by <a target="_blank" href="https://aarjithn.github.io">aarjithn</a> 
+        </footer>        
 
         <script id="table-template" type="text/x-handlebars-template">
             {{#each elements}}
@@ -27,6 +37,11 @@
                     <span class="name">{{name}}</span>
 
                     <div class="details">
+
+                        <div class="details-close">
+                            <button class="close">×</button>
+                        </div>
+
                         <div class="details-info">
                             <p class="summary">{{summary}}</p>
                         </div>
@@ -35,12 +50,17 @@
 
                             <div class="appearance measure">
                                 <span class="label">Appearance</span>
-                                <span class="value">{{appearance}}</span>
+                                <span class="value">{{checkEmpty appearance}}</span>
                             </div>
                             
                         </div>
 
                         <div class="details-row">
+
+                            <div class="discovery measure">
+                                <span class="label">Discovered By</span>
+                                <span class="value">{{checkEmpty discovered_by}}</span>
+                            </div>
 
                             <div class="category measure">
                                 <span class="label">Category</span>
@@ -52,38 +72,41 @@
                                 <span class="value">{{phase}}</span>
                             </div>
 
-                            <div class="discovery measure">
-                                <span class="label">Discovered By</span>
-                                <span class="value">{{discovered_by}}</span>
-                            </div>
-
                         </div>
 
                         <div class="details-row">
 
                             <div class="atomic_mass measure">
                                 <span class="label">Atomic Mass</span>
-                                <span class="value">{{atomic_mass}}</span>
+                                <span class="value count">{{checkEmpty atomic_mass}}</span>
                             </div>
 
                             <div class="density measure">
                                 <span class="label">Density</span>
-                                <span class="value">{{density}}</span>
+                                <span class="value count">{{checkEmpty density}}</span>
                             </div>
 
                             <div class="boil measure">
                                 <span class="label">Boiling Point</span>
-                                <span class="value">{{boil}}</span>
+                                <span class="value count">{{checkEmpty boil}}</span>
                             </div>
 
                             <div class="melt measure">
                                 <span class="label">Melting Point</span>                            
-                                <span class="value">{{melt}}</span>
+                                <span class="value count">{{checkEmpty melt}}</span>
                             </div>
 
                         </div>
+
+                        <div class="details-row">
+
+                            <div class="wiki measure">
+                                <span class="label">Read More at <a class="link" target="_blank" href="{{source}}">Wikipedia</a></span>
+                            </div>
+
+                        </div>
+                
                     </div>
-                    
                 </div>
             {{/each}}
         </script>
